@@ -44,6 +44,7 @@ void *_realloc(void *ptr, size_t old_size, size_t new_size);
 char **read_and_store_file(const char *filename);
 char *_strdup(const char *str);
 char ***parse(char **lines);
+token_t *create_token_node(char *token);
 
 
 typedef struct token token_t;
