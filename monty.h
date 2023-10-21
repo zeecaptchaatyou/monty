@@ -9,6 +9,7 @@
 #define MAX_LINES 100
 #define MAX_TOKENS 10
 #define MAX_ERR_MSG_SIZE 1024
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -42,6 +43,40 @@ void (*f)(stack_t **stack, unsigned int line_number);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
 char **read_and_store_file(const char *filename);
 char *_strdup(const char *str);
-char ***parser(char **lines);
+char ***parse(char **lines);
+
+/**
+ * struct token - singly linked list for the tokens
+ * @text: contains the tokens
+ * @next: pointer to the next token
+*/
+typedef struct token
+{
+char *text;
+struct token *next;
+} token_t;
+
+/**
+ * struct line - singly linked structure for an entire line
+ * @tokens: head node of an entire line of tokens
+ * @next: pointer  to the next token
+*/
+typedef struct line
+{
+struct token *tokens; /*points to the first token on each line*/
+struct line *next;
+} line_t;
+
+/**
+ * line_list - structure fr the entire list of lines containng tokens
+ * @head: head node to the first line in the list
+*/
+typedef struct line_list
+{
+struct line *head;
+} line_list_t;
+
+
+
 
 #endif /*MONTY_H*/

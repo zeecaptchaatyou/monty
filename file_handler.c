@@ -51,35 +51,35 @@ return (lines);
 }
 
 /**
- * parser - parses sha
+ * parse - parses sha
  * @lines: data to parse
  * Return: parserd data, oti sunnmiiiiiii
 */
-char ***parser(char **lines)
+char ***parse(char **lines)
 {
 char ***tokens_arr = NULL, **tokens = NULL, *token;
 char **line = lines;
-size_t line_len = 0, i = 0;
+size_t line_count = 0, i = 0;
 size_t token_count = 0;
 
 if (lines == NULL)
 return (NULL);
 
-for ( ; *line; line++)
-line_len++;
+for ( ; *line; line++) /*count the number of lines*/
+line_count++;
 
-tokens_arr = (char ***)malloc((line_len + 1) * sizeof(char **));
+tokens_arr = (char ***)malloc((line_count + 1) * sizeof(char **));
 if (tokens_arr == NULL)
 return (NULL);
 
-for (line = lines; *line; line++)
+for (line = lines; *line; line++) /*parse each line into tokens*/
 {
 token = strtok(*line, " ");
 while (token)
 {
 token_count++;
 tokens = (char **)realloc(tokens, (token_count + 1) * sizeof(char *));
-tokens[token_count - 1] = strdup(token);
+tokens[token_count - 1] = _strdup(token);
 token = strtok(NULL, " ");
 }
 
@@ -89,4 +89,54 @@ i++;
 
 tokens_arr[i] = NULL;
 return (tokens_arr);
+}
+
+/**
+ * main - tests the parse function
+ * Return: 0
+*/
+int main(void)
+{
+char **lines = malloc(4 * sizeof(char *));
+size_t i = 0, j = 0;
+char ***tokens = NULL;
+
+lines[0] = "push 1";
+lines[1] = "pop";
+lines[2] = "push 3";
+lines[3] = NULL;
+
+tokens = parse(lines);
+if (tokens == NULL)
+{
+fprintf(stderr, "Parsing failed\n");
+return 1;
+}
+
+
+while (tokens[i] != NULL)
+{
+j = 0;
+while (tokens[i][j] != NULL)
+{
+printf("Line %lu, Token %lu: %s\n", i + 1, j + 1, tokens[i][j]);
+j++;
+}
+i++;
+}
+
+/*Free the dynamically allocated memory when done*/
+for (i = 0; tokens[i] != NULL; i++)
+{
+j = 0;
+while (tokens[i][j] != NULL)
+{
+free(tokens[i][j]);
+j++;
+}
+free(tokens[i]);
+}
+free(tokens);
+
+return 0;
 }
