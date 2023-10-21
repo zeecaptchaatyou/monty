@@ -45,6 +45,11 @@ char **read_and_store_file(const char *filename);
 char *_strdup(const char *str);
 char ***parse(char **lines);
 
+
+typedef struct token token_t;
+typedef struct line line_t;
+
+
 /**
  * struct token - singly linked list for the tokens
  * @text: contains the tokens
@@ -53,7 +58,7 @@ char ***parse(char **lines);
 typedef struct token
 {
 char *text;
-struct token *next;
+token_t *next;
 } token_t;
 
 /**
@@ -63,17 +68,17 @@ struct token *next;
 */
 typedef struct line
 {
-struct token *tokens; /*points to the first token on each line*/
-struct line *next;
+token_t *tokens; /*points to the first token on each line*/
+line_t *next; /*points to the next line*/
 } line_t;
 
 /**
- * line_list - structure fr the entire list of lines containng tokens
+ * line_list - structure for the entire list of lines containng tokens
  * @head: head node to the first line in the list
 */
 typedef struct line_list
 {
-struct line *head;
+line_t *head;
 } line_list_t;
 
 
