@@ -60,7 +60,7 @@ exit(EXIT_FAILURE);
 
 void f_token(line_t *line, line_list_t *line_list)
 {
-if (line != NULL);
+if (line != NULL)
 free_line(line);
 free_line_list(line_list);
 fprintf(stderr, "Error: malloc failed\n");
