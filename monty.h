@@ -40,16 +40,6 @@ char *opcode;
 void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void *_realloc(void *ptr, size_t old_size, size_t new_size);
-char **read_and_store_file(const char *filename);
-char *_strdup(const char *str);
-char ***parse(char **lines);
-token_t *create_token_node(char *token);
-
-
-typedef struct token token_t;
-typedef struct line line_t;
-
 
 /**
  * struct token - singly linked list for the tokens
@@ -59,7 +49,7 @@ typedef struct line line_t;
 typedef struct token
 {
 char *text;
-token_t *next;
+struct token *next;
 } token_t;
 
 /**
@@ -69,8 +59,8 @@ token_t *next;
 */
 typedef struct line
 {
-token_t *tokens; /*points to the first token on each line*/
-line_t *next; /*points to the next line*/
+struct token *tokens; /*points to the first token on each line*/
+struct line *next; /*points to the next line*/
 } line_t;
 
 /**
@@ -79,10 +69,23 @@ line_t *next; /*points to the next line*/
 */
 typedef struct line_list
 {
-line_t *head;
+struct line *head;
 } line_list_t;
 
 
+void *_realloc(void *ptr, size_t old_size, size_t new_size);
+char *_strdup(const char *str);
+char ***parse(char **lines);
 
+token_t *create_token_node(char *token);
+line_list_t *build_lines_of_tokens(char **lines);
+char **read_and_store_file(const char *filename);
 
+/*freeing functions*/
+void free_token(token_t *token);
+void free_line(line_t *line);
+void free_line_list(line_list_t *lines);
+void f_token(line_t *line, line_list_t *line_list);
+void f_line(token_t *token, line_list_t *line_list);
+void f_line_list();
 #endif /*MONTY_H*/

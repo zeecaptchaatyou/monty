@@ -9,43 +9,23 @@ token_t *create_token_node(char *token)
 {
 token_t *new_node;
 
-if (token == NULL) /*check if this should be erased later, since this
-token_node function is being called in a loop that runs on the condition that
-the token isn't null, you gerrit? 😂😂*/
+
+if (token == NULL)
 return (NULL);
 
 new_node = (token_t *)malloc(sizeof(token_t));
 if (new_node == NULL)
 return (NULL);
 
-new_node->text = token;
 
+new_node->text = _strdup(token);
+if (new_node->text == NULL)
+{
+free(new_node);
+return (NULL);
+}
+
+/*if this function doesn't work properly, then maybe you should*/
+/*come back and set the new_node->next to NULL.....it could help*/
 return (new_node);
 }
-
-
-
-
-
-
-
-
-
-
-
-/**
- * line_node - creates a new node for a line of tokens
- * @first_token: pointer to the first token of type token_t on line 1
- * Return: pointer to the first line
-
-line_t *line_node(token_t first_token)
-{
-line_t *new_node;
-
-new_node == (line_t *)mallloc(sizeof(line_t));
-if (new_node == NULL)
-return (NULL);
-
-new_node->tokens = first_token;
-}
-*/

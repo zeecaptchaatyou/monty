@@ -1,0 +1,11 @@
+parser.build_lines_of_tokens:
+    l_ptr and ptr are temporary pointers for the head_line and head_tokens
+    respectively....betty will find a fault with how this comment is written but
+    at this stage, I don't give a f what betty thinks😭😭
+    she's such a judgmental one, always finding issues with my code.
+    betty, you are one judgmental bitch.
+
+create_nodes.create_token_node:
+    check if this should be erased later, since this
+    token_node function is being called in a loop that runs on the condition that
+    the token isn't null, you gerrit? 😂😂
