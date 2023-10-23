@@ -7,7 +7,7 @@
 */
 char **read_and_store_file(const char *filename)
 {
-char line[MAX_LINE_SIZE], **lines = NULL;
+char dline[MAX_LINE_SIZE], **lines = NULL;
 size_t line_count = 0;
 FILE *file = fopen(filename, "r"); /*open the file in read mode*/
 
@@ -18,13 +18,13 @@ exit(EXIT_FAILURE);
 }
 
 /*fegegegegegegegeg*/
-while (fgets(line, sizeof(line), file))
+while (fgets(dline, sizeof(dline), file))
 {
 /*removes the newline character and replaces it with null*/
-line[strcspn(line, "\n")] = '\0';
+dline[strcspn(dline, "\n")] = '\0';
 
 lines = (char **)realloc(lines, (line_count + 1) * sizeof(char *));
-lines[line_count] = _strdup(line);
+lines[line_count] = _strdup(dline);
 line_count++;
 }
 

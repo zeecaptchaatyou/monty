@@ -27,5 +27,6 @@ return (NULL);
 
 /*if this function doesn't work properly, then maybe you should*/
 /*come back and set the new_node->next to NULL.....it could help*/
+new_node->next = NULL;
 return (new_node);
 }

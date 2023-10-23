@@ -73,3 +73,9 @@ void f_line_list()
 fprintf(stderr, "Error: malloc failed\n");
 exit(EXIT_FAILURE);
 }
+
+void malloc_error()
+{
+fprintf(stderr, "Error: malloc failed\n");
+exit(EXIT_FAILURE);
+}

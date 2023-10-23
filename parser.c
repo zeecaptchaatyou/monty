@@ -17,7 +17,7 @@ return (NULL);
 
 line_list = (line_list_t *)malloc(sizeof(line_list_t));
 if (line_list == NULL)
-f_line_list();
+return (NULL);
 
 line_list->head = NULL;
 while (*lines)
@@ -30,19 +30,15 @@ while (tk)
 if (head_token == NULL)
 {
 head_token = ptr = create_token_node(tk);
-if (head_token == NULL)
-f_token(current_line, line_list);
 }
 else
 { ptr->next = create_token_node(tk);
-if (ptr == NULL)
-f_token(current_line, line_list);
 ptr = ptr->next; }
 tk = strtok(NULL, " "); }
 
 current_line = (line_t *)malloc(sizeof(line_t));
 if (current_line == NULL)
-f_line(head_token, line_list);
+return (NULL);
 
 current_line->tokens = head_token;
 
@@ -54,4 +50,5 @@ prev_line = current_line;
 current_line->next = NULL;
 lines++;
 }
+
 return (line_list); }
