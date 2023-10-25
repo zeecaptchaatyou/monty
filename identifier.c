@@ -1,16 +1,15 @@
 #include "monty.h"
 
-
 /**
- * identify - identifies what opcode the head_token contains
- * @head_token: head_token of a line of monty instructions
- * Return: pointer to the corresponding function
+ * identify - returns a pointer to function correspoinding to argument opcode
+ * @opcode: yeah, you get it now.
+ * Return: pointer to corresponding function
 */
-void (*identify(token_t *head_token))(stack_t **, unsigned int)
+void (*identify(char *opcode))(stack_t**, unsigned int)
 {
 size_t i = 0;
-char *op = _strdup(head_token->text);
-instruction_t instructions[] = {
+
+instruction_t opcodes[] = {
 {"pop", pop},
 {"pall", pall},
 {"pint", pint},
@@ -21,18 +20,20 @@ instruction_t instructions[] = {
 {"div", divide},
 {"mul", mul},
 {"mod", mod},
+{"pchar", pchar},
+{"pstr", pstr},
+{"rotl", rotl},
+{"rotr", rotr},
+{"stack", stack},
+{"queue", queue},
 {NULL, NULL}
 };
 
-while (instructions[i].opcode != NULL)
+for (i = 0; opcodes[i].opcode; i++)
 {
-if (strcmp(op, instructions[i].opcode) == 0)
-{
-free(op);
-return (instructions[i].f);
+if (strcmp(opcode, opcodes[i].opcode) == 0)
+return (opcodes[i].f);
 }
-i++;
-}
-free(op);
+
 return (NULL);
 }

@@ -1,233 +1,81 @@
 #include "monty.h"
 
 /**
- * execute_push - executes t
- * @tok: ...
- * @li: ....
- * @stack: ....
- * @num: ...
-*/
-void execute_push(token_t *tok, line_t *li, stack_t **stack, unsigned int  num)
-{
-if (strcmp(tok->text, "push") == 0)
-{
-push_element(stack, num, li);
-}
-}
-
-/**
- * push_element - pushes a number onto the stack
- * @stack: stack unto which a number is to be pushed
- * @line_number: literally the line number
-*/
-void push_element(stack_t **stack, unsigned int line_number, line_t *ine)
-{
-token_t *token = NULL;
-stack_t *new_node = NULL;
-int element = 0;
-char *element_str = NULL;
-
-if (ine != NULL)
-{
-token = ine->tokens;
-element_str = _strdup(token->next->text);
-if (element_str == NULL)
-malloc_error();
-
-element = atoi(element_str);
-if (element == 0) /*handle atoi's return*/
-{ fprintf(stderr, "L%u: usage: push integer\n", line_number);
-free (element_str);
-exit(EXIT_FAILURE); }
-
-new_node = (stack_t *)malloc(sizeof(stack_t));
-if (new_node == NULL) /*handle malloc's return*/
-{ free (element_str);
-malloc_error(); }
-
-new_node->n = element;
-new_node->prev = NULL; /*debbug here if you have possible erros*/
-new_node->next = *stack;
-
-if (*stack != NULL)
-(*stack)->prev = new_node;
-
-*stack = new_node;
-free(element_str); }}
-
-
-/**
- * pop - pops an element off a stack_t stack
- * @stack: pointer of type stack_t stack
- * @line_number: literally the line number
-*/
-void pop(stack_t **stack, unsigned int line_number)
-{
-stack_t *temp;
-
-if (*stack == NULL)
-{
-fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
-exit(EXIT_FAILURE);
-}
-(void)line_number;
-temp = *stack;
-*stack = temp->next;
-
-if (*stack != NULL)
-(*stack)->prev = NULL;
-
-free(temp);
-}
-
-
-/**
- * pall - prints all values on the stack, starting from the top of the stack
- * @stack: pointer of type stack_t stack
- * @line_number: literally the line number
-*/
-void pall(stack_t **stack, unsigned int line_number)
-{
-stack_t *current = *stack;
-
-(void)line_number; /*suppresses the unused variable warning*/
-
-while (current != NULL)
-{
-printf("%d\n", current->n);
-current = current->next;
-}
-line_number++;
-}
-
-/**
- * pint - prints the value at the top of the stack
- * @stack: pointer of type stack_t stack
- * @line_number: literally the line number
-*/
-void pint(stack_t **stack, unsigned int line_number)
-{
-if (*stack == NULL)
-{
-fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
-exit(EXIT_FAILURE);
-}
-(void)line_number; /*suppresses the unused variable warning*/
-
-printf("%d\n", (*stack)->n);
-line_number++;
-}
-
+ * swap - swaps the top two value elements of a stack_t linked list.
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
+ */
 void swap(stack_t **stack, unsigned int line_number)
 {
-    stack_t *temp;
+stack_t *ptr;
 
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    temp = (*stack)->next;
-    (*stack)->next = temp->next;
-    if (temp->next != NULL)
-        temp->next->prev = *stack;
-    temp->prev = NULL;
-    temp->next = *stack;
-    (*stack)->prev = temp;
-    *stack = temp;
+if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+{
+lastTokenisAnError(short_stack_error(line_number, "swap"));
+return;
 }
 
-void add(stack_t **stack, unsigned int line_number)
-{
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    (*stack)->next->n += (*stack)->n;
-    pop(stack, line_number);
-}
-
-void nop(stack_t **stack, unsigned int line_number)
-{
-    (void)stack;
-    (void)line_number;
-}
-
-void sub(stack_t **stack, unsigned int line_number)
-{
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't sub, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    (*stack)->next->n -= (*stack)->n;
-    pop(stack, line_number);
-}
-
-
-/**
- * divide - divides the second top element of the stack by the top element
- * @stack: pointer to the stack
- * @line_number: line number
- */
-void divide(stack_t **stack, unsigned int line_number)
-{
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't div, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    if ((*stack)->n == 0)
-    {
-        fprintf(stderr, "L%u: division by zero\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    (*stack)->next->n /= (*stack)->n;
-    pop(stack, line_number);
+ptr = (*stack)->next->next;
+(*stack)->next->next = ptr->next;
+(*stack)->next->prev = ptr;
+if (ptr->next)
+ptr->next->prev = (*stack)->next;
+ptr->next = (*stack)->next;
+ptr->prev = *stack;
+(*stack)->next = ptr;
 }
 
 /**
- * mul - multiplies the top two elements of the stack
- * @stack: pointer to the stack
- * @line_number: line number
+ * pop - pops off the first element of the stack
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
  */
-void mul(stack_t **stack, unsigned int line_number)
+void pop(stack_t **stack, unsigned int line_number)
 {
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't mul, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+stack_t *next = NULL;
 
-    (*stack)->next->n *= (*stack)->n;
-    pop(stack, line_number);
+if ((*stack)->next == NULL)
+{
+lastTokenisAnError(empty_stack_err(line_number));
+return;
+}
+
+next = (*stack)->next->next;
+free((*stack)->next);
+if (next)
+next->prev = *stack;
+(*stack)->next = next;
 }
 
 /**
- * mod - computes the remainder of the division of the second top element by the top element
- * @stack: pointer to the stack
- * @line_number: line number
+ * pint - prints the top value on the stack
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
  */
-void mod(stack_t **stack, unsigned int line_number)
+void pint(stack_t **stack, unsigned int line_number)
 {
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%u: can't mod, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+if ((*stack)->next == NULL)
+{
+lastTokenisAnError(pint_error(line_number));
+return;
+}
 
-    if ((*stack)->n == 0)
-    {
-        fprintf(stderr, "L%u: division by zero\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+printf("%d\n", (*stack)->next->n);
+}
 
-    (*stack)->next->n %= (*stack)->n;
-    pop(stack, line_number);
+/**
+ * pall - prints all values in the stack
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
+ */
+void pall(stack_t **stack, unsigned int line_number)
+{
+stack_t *tmp = (*stack)->next;
+
+while (tmp)
+{
+printf("%d\n", tmp->n);
+tmp = tmp->next;
+}
+(void)line_number;
 }

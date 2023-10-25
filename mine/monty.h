@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define MAX_LINE_SIZE 1024
 #define MAX_LINES 100
@@ -63,7 +64,6 @@ struct token *tokens; /*points to the first token on each line*/
 struct line *next; /*points to the next line*/
 } line_t;
 
-extern line_t *cur_line;
 
 /**
  * line_list - structure for the entire list of lines containng tokens
@@ -79,6 +79,7 @@ void *_realloc(void *ptr, size_t old_size, size_t new_size);
 char *_strdup(const char *str);
 char ***parse(char **lines);
 
+extern line_t *cur_line;
 token_t *create_token_node(char *token);
 line_list_t *build_lines_of_tokens(char **lines);
 char **read_and_store_file(const char *filename);
@@ -94,8 +95,10 @@ void f_line_list();
 /*error handling functions*/
 void malloc_error();
 
+void push_element(stack_t **stack, unsigned int line_number, line_t *ine);
+
 /*opcodes functions*/
-void push_element(stack_t **stack, unsigned int line_number);
+void push(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
@@ -108,14 +111,14 @@ void mul(stack_t **stack, unsigned int line_number);
 void mod(stack_t **stack, unsigned int line_number);
 void pchar(stack_t **stack, unsigned int line_number);
 void pstr(stack_t **stack, unsigned int line_number);
-void rot1(stack_t **stack, unsigned int line_number);
+void rotl(stack_t **stack, unsigned int line_number);
 void rotr(stack_t **stack, unsigned int line_number);
 void stack(stack_t **stack, unsigned int line_number);
 void queue(stack_t **stack, unsigned int line_number);
 
-
+void execute_push(token_t *tok, line_t *li, stack_t **stack, unsigned int  );
 void (*identify(token_t *head_token))(stack_t **, unsigned int);
-
-
+line_t *bypass_error(line_t *lline, unsigned int line_num);
+line_t *actual_push(line_t *llline, unsigned int line_number);
 
 #endif /*MONTY_H*/

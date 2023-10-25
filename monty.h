@@ -1,15 +1,20 @@
-#ifndef MONTY_H
-#define MONTY_H
+#ifndef __MONTY_H__
+#define __MONTY_H__
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <string.h>
-#include <stdbool.h>
 
-#define MAX_LINE_SIZE 1024
-#define MAX_LINES 100
-#define MAX_TOKENS 10
-#define MAX_ERR_MSG_SIZE 1024
+#define STACK 0
+#define QUEUE 1
+#define DELIMS " \t\n\a\b"
+
+/* GLOBAL OPCODE TOKENS */
+extern char **op_toks;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -18,7 +23,7 @@
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct stack_s
 {
@@ -33,7 +38,7 @@ struct stack_s *next;
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct instruction_s
 {
@@ -41,63 +46,9 @@ char *opcode;
 void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+void (*identify(char *opcode))(stack_t**, unsigned int);
 
-/**
- * struct token - singly linked list for the tokens
- * @text: contains the tokens
- * @next: pointer to the next token
-*/
-typedef struct token
-{
-char *text;
-struct token *next;
-} token_t;
-
-/**
- * struct line - singly linked structure for an entire line
- * @tokens: head node of an entire line of tokens
- * @next: pointer  to the next token
-*/
-typedef struct line
-{
-struct token *tokens; /*points to the first token on each line*/
-struct line *next; /*points to the next line*/
-} line_t;
-
-
-/**
- * line_list - structure for the entire list of lines containng tokens
- * @head: head node to the first line in the list
-*/
-typedef struct line_list
-{
-struct line *head;
-} line_list_t;
-
-
-void *_realloc(void *ptr, size_t old_size, size_t new_size);
-char *_strdup(const char *str);
-char ***parse(char **lines);
-
-extern line_t *cur_line;
-token_t *create_token_node(char *token);
-line_list_t *build_lines_of_tokens(char **lines);
-char **read_and_store_file(const char *filename);
-
-/*freeing functions*/
-void free_token(token_t *token);
-void free_line(line_t *line);
-void free_line_list(line_list_t *lines);
-void f_token(line_t *line, line_list_t *line_list);
-void f_line(token_t *token, line_list_t *line_list);
-void f_line_list();
-
-/*error handling functions*/
-void malloc_error();
-
-void push_element(stack_t **stack, unsigned int line_number, line_t *ine);
-
-/*opcodes functions*/
+/*opcode functions*/
 void push(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
@@ -111,14 +62,41 @@ void mul(stack_t **stack, unsigned int line_number);
 void mod(stack_t **stack, unsigned int line_number);
 void pchar(stack_t **stack, unsigned int line_number);
 void pstr(stack_t **stack, unsigned int line_number);
-void rot1(stack_t **stack, unsigned int line_number);
+void rotl(stack_t **stack, unsigned int line_number);
 void rotr(stack_t **stack, unsigned int line_number);
 void stack(stack_t **stack, unsigned int line_number);
 void queue(stack_t **stack, unsigned int line_number);
 
-void execute_push(token_t *tok, line_t *li, stack_t **stack, unsigned int  );
-void (*identify(token_t *head_token))(stack_t **, unsigned int);
-line_t *bypass_error(line_t *lline, unsigned int line_num);
-line_t *actual_push(line_t *llline, unsigned int line_number);
 
-#endif /*MONTY_H*/
+/*random functions*/
+void free_stack(stack_t **stack);
+int stack_initiator(stack_t **stack);
+int mode_checker(stack_t *stack);
+void free_tokens(void);
+unsigned int token_length_counter(void);
+int sidekick(FILE *script_fd);
+void lastTokenisAnError(int error_code);
+
+
+char **strtow(char *str, char *delims);
+char *get_int(int n);
+int is_delim(char ch, char *delims);
+int get_word_count(char *str, char *delims);
+int get_word_length(char *str, char *delims);
+int get_word_length(char *str, char *delims);
+char *get_next_word(char *str, char *delims);
+
+/*functions from the error handling files*/
+int usage_err(void);
+int empty_stack_err(unsigned int line_number);
+int short_stack_error(unsigned int line_number, char *op);
+int invalid_opcode_err(char *opcode, unsigned int line_number);
+int div_error(unsigned int line_number);
+int pchar_error(unsigned int line_number, char *message);
+int malloc_error(void);
+int pint_error(unsigned int line_number);
+int file_opening_err(char *filename);
+int invalid_push_err(unsigned int line_number);
+int invalid_line_checker(char *line, char *delims);
+
+#endif /* __MONTY_H__ */

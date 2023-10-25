@@ -1,81 +1,33 @@
 #include "monty.h"
 
 /**
- * free_token - freeks a token
- * @token: token to be freed
-*/
-void free_token(token_t *token)
+ * free_tokens - Frees the global op_toks array of strings.
+ */
+void free_tokens(void)
 {
-if (token)
-{
-free(token->text);
-free(token);
-}}
+	size_t i = 0;
 
+	if (op_toks == NULL)
+		return;
+
+	for (i = 0; op_toks[i]; i++)
+		free(op_toks[i]);
+
+	free(op_toks);
+}
 
 /**
- * free_line - frees a line
- * @line: line to be freed
-*/
-void free_line(line_t *line)
+ * free_stack - Frees a stack_t stack.
+ * @stack: A pointer to the top (stack) or
+ *         bottom (queue) of a stack_t.
+ */
+void free_stack(stack_t **stack)
 {
-if (line)
+stack_t *ptr = *stack;
+
+while (*stack)
 {
-token_t *current = line->tokens;
-while (current)
-{
-token_t *temp = current;
-current = current->next;
-free_token(temp);
-}
-free(line);
+ptr = (*stack)->next;
+free(*stack);
+*stack = ptr;
 }}
-
-
-/**
- * free_line_list - frees a list of lines
- * @lines: list of lines to be freed
-*/
-void free_line_list(line_list_t *lines)
-{
-if (lines)
-{
-line_t *current = lines->head;
-while (current)
-{
-line_t *temp = current;
-current = current->next;
-free_line(temp);
-}
-free(lines);
-}}
-
-void f_line(token_t *token, line_list_t *line_list)
-{
-free_token(token);
-free_line_list(line_list);
-fprintf(stderr, "Error: malloc failed\n");
-exit(EXIT_FAILURE);
-}
-
-void f_token(line_t *line, line_list_t *line_list)
-{
-if (line != NULL)
-free_line(line);
-free_line_list(line_list);
-fprintf(stderr, "Error: malloc failed\n");
-exit(EXIT_FAILURE);
-}
-
-
-void f_line_list()
-{
-fprintf(stderr, "Error: malloc failed\n");
-exit(EXIT_FAILURE);
-}
-
-void malloc_error()
-{
-fprintf(stderr, "Error: malloc failed\n");
-exit(EXIT_FAILURE);
-}
