@@ -10,6 +10,7 @@ void (*identify(char *opcode))(stack_t**, unsigned int)
 size_t i = 0;
 
 instruction_t opcodes[] = {
+{"push", push},
 {"pop", pop},
 {"pall", pall},
 {"pint", pint},
