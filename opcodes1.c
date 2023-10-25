@@ -71,12 +71,35 @@ pop(stack, line_number);
 }
 
 /**
- * nop - Does absolutely nothing for the Monty opcode 'nop'.
- * @stack: A pointer to the top mode node of a stack_t linked list.
- * @line_number: The current working line number of a Monty bytecodes file.
+ * nop - does nothing.
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
  */
 void nop(stack_t **stack, unsigned int line_number)
 {
 (void)stack;
 (void)line_number;
+}
+
+/**
+ * divide - divides the second value on the stack by the first one
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
+ */
+void divide(stack_t **stack, unsigned int line_number)
+{
+if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+{
+lastTokenisAnError(short_stack_error(line_number, "div"));
+return;
+}
+
+if ((*stack)->next->n == 0)
+{
+lastTokenisAnError(div_error(line_number));
+return;
+}
+
+(*stack)->next->next->n /= (*stack)->next->n;
+pop(stack, line_number);
 }

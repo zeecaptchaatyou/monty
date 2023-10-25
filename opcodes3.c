@@ -68,3 +68,20 @@ return;
 (*stack)->next->next->n %= (*stack)->next->n;
 pop(stack, line_number);
 }
+
+/**
+ * sub - subtracts the second value from the top node from the top
+ * @stack: pointer to the first node on the stack
+ * @line_number: line being executed in the file to be interpreted
+ */
+void sub(stack_t **stack, unsigned int line_number)
+{
+if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+{
+lastTokenisAnError(short_stack_error(line_number, "sub"));
+return;
+}
+
+(*stack)->next->next->n -= (*stack)->next->n;
+pop(stack, line_number);
+}

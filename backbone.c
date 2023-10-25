@@ -55,17 +55,17 @@ int stack_initiator(stack_t **stack)
 {
 	stack_t *s;
 
-	s = malloc(sizeof(stack_t));
-	if (s == NULL)
-		return (malloc_error());
+s = malloc(sizeof(stack_t));
+if (s == NULL)
+return (malloc_error());
 
-	s->n = STACK;
-	s->prev = NULL;
-	s->next = NULL;
+s->n = STACK;
+s->prev = NULL;
+s->next = NULL;
 
-	*stack = s;
+*stack = s;
 
-	return (EXIT_SUCCESS);
+return (EXIT_SUCCESS);
 }
 
 /**

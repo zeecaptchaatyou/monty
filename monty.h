@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <string.h>
+#include <errno.h>
 
 #define STACK 0
 #define QUEUE 1
@@ -98,5 +99,6 @@ int pint_error(unsigned int line_number);
 int file_opening_err(char *filename);
 int invalid_push_err(unsigned int line_number);
 int invalid_line_checker(char *line, char *delims);
+ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif /* __MONTY_H__ */
